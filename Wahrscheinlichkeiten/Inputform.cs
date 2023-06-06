@@ -24,6 +24,19 @@ public class InputForm : IEquatable<InputForm?>
         "<="
         };
     public static readonly string[] Signs = strings;
+
+    private static Sign Switch(Sign sign)
+    {
+        return sign switch
+        {
+            Sign.greaterThan => Sign.smallerThan,
+            Sign.smallerThan => Sign.greaterThan,
+            Sign.smallerThanOrEqualTo => Sign.greaterThanOrEqualTo,
+            Sign.greaterThanOrEqualTo => Sign.smallerThanOrEqualTo,
+            _ => sign
+        };
+
+    }
     
     public char Variable { get; }
     
@@ -69,7 +82,7 @@ public class InputForm : IEquatable<InputForm?>
         return default;
     }
 
-    public Range GetRangeNoSecond()
+    private Range GetRangeNoSecond()
     {
         float f = MathF.Round(NumberOne, 0);
         int fi = (int)f;
@@ -109,7 +122,7 @@ public class InputForm : IEquatable<InputForm?>
         {
             return $"P({NumberOne} {Signs[(sbyte)SignOne]} {Variable} {Signs[(sbyte)SignTwo]} {NumberTwo}";
         }
-        return $"P({Variable} {Signs[(sbyte)SignOne]} {NumberOne})";
+        return $"P({Variable} {Signs[(sbyte)Switch(SignOne)]} {NumberOne})";
     }
 
     public override bool Equals(object? obj)
